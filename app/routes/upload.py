@@ -1,3 +1,4 @@
+import csv
 import time
 from fastapi import APIRouter, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
@@ -38,9 +39,8 @@ async def upload(file: UploadFile = File(...)):
 
             metadata = pd.read_csv(file.file, nrows=0)
             
-            file.file.seek(0) # this a pointer to the beginning of the file
-            row_count = sum(1 for _ in file.file) - 1  # Subtract header row
             file.file.seek(0)
+            row_count = sum(1 for _ in csv.reader(file.file)) - 1
             
             
         else: # xlsx or xls
@@ -50,11 +50,10 @@ async def upload(file: UploadFile = File(...)):
             file.file.seek(0)
             df_full = pd.read_excel(file.file, usecols=[0])  # Only load 1 column
             row_count = df_full.shape[0]
-            file.file.seek(0)
             
             
             
-        end_time = time.time() - start
+        end_time = round(time.time() - start, 2)
         columns = list(metadata.columns)
         # dtypes = metadata.dtypes.apply(lambda x: str(x)).to_dict()
 
@@ -63,7 +62,7 @@ async def upload(file: UploadFile = File(...)):
             "columns": columns,
             # "dtypes": dtypes,
             "num_rows": row_count,
-            "time_taken": end_time
+            "time_taken": end_time + " seconds"
         })
     
     except HTTPException:

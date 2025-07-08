@@ -1,4 +1,3 @@
-import csv
 import time
 from fastapi import APIRouter, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
@@ -40,7 +39,8 @@ async def upload(file: UploadFile = File(...)):
             metadata = pd.read_csv(file.file, nrows=0)
             
             file.file.seek(0)
-            row_count = sum(1 for _ in csv.reader(file.file)) - 1
+            row_count = sum(1 for _ in file.file) - 1  # Subtract header row
+            file.file.seek(0)
             
             
         else: # xlsx or xls

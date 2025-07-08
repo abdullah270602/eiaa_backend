@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 import pandas as pd
 import logging
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/upload", tags=["Upload"])
@@ -53,7 +54,7 @@ async def upload(file: UploadFile = File(...)):
             
             
             
-        end_time = round(time.time() - start, 2)
+        end_time = time.time() - start
         columns = list(metadata.columns)
         # dtypes = metadata.dtypes.apply(lambda x: str(x)).to_dict()
 

@@ -62,7 +62,7 @@ async def upload(file: UploadFile = File(...)):
             "columns": columns,
             # "dtypes": dtypes,
             "num_rows": row_count,
-            "time_taken": end_time + " seconds"
+            "time_taken": str(end_time) + " seconds"
         })
     
     except HTTPException:

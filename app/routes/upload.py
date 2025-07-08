@@ -2,8 +2,6 @@ import time
 from fastapi import APIRouter, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 import pandas as pd
-import io
-from typing import List, Dict, Any
 import logging
 
 logger = logging.getLogger(__name__)

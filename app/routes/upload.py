@@ -14,7 +14,7 @@ from app.services.template_loader import get_required_columns, load_template_col
 
 router = APIRouter(prefix="/upload", tags=["Upload"])
 
-TEMPLATE_PATH = "templates\Customer Template.csv"
+TEMPLATE_PATH = os.getenv("TEMPLATE_PATH")
 
 def detect_extension(filename: str) -> str:
     if filename.endswith(".csv"):

@@ -1,73 +1,71 @@
-import time
+import json
 from fastapi import APIRouter, File, UploadFile, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
+from typing import Tuple
+import os
+import io
 import pandas as pd
-import logging
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+from app.services.file_utils import extract_preview_data
+from app.services.formatter import apply_column_mapping
+from app.services.llm_agent import call_mapping_agent
+from app.services.template_loader import get_required_columns, load_template_columns
+
 
 router = APIRouter(prefix="/upload", tags=["Upload"])
 
-@router.post("/",)
-async def upload(file: UploadFile = File(...)):
-    logger.info(f" Uploading file {file.filename}")
-    start = time.time()
+TEMPLATE_PATH = "templates\Customer Template.csv"
+
+def detect_extension(filename: str) -> str:
+    if filename.endswith(".csv"):
+        return ".csv"
+    elif filename.endswith(".xlsx") or filename.endswith(".xls"):
+        return ".xlsx"
+    else:
+        raise HTTPException(status_code=400, detail="Unsupported file type")
+
+
+@router.post("/", status_code=200)
+async def upload_and_format(file: UploadFile = File(...)):
+    extension = detect_extension(file.filename)
+    contents = await file.read()
+    buffer = io.BytesIO(contents)
+
     try:
-        allowed_extensions = ['.csv', '.xlsx', '.xls']
-        file_extension = None
+        preview_data, df = extract_preview_data(buffer, extension)
+        template_columns = load_template_columns(TEMPLATE_PATH)
+        required_columns = get_required_columns()
 
-        if file.filename:
-            filename_lower = file.filename.lower()
+        mapping_result = call_mapping_agent(
+            template_columns, required_columns, preview_data
+        )
 
-            for ext in allowed_extensions:
-                if filename_lower.endswith(ext):
-                    file_extension = ext
-                    break
+        df_final = apply_column_mapping(
+            df, 
+            mapping_result["column_mapping"],
+            mapping_result["unmatched_columns"]
+        )
 
-        if not file_extension:
-            raise HTTPException(
-                status_code=400, 
-                detail=f"Unsupported file type. Allowed types: {', '.join(allowed_extensions)}"
-            )
-        
-        metadata = None
-        
-        if file_extension == '.csv':
+        output_buffer = io.StringIO()
+        df_final.to_csv(output_buffer, index=False)
+        output_buffer.seek(0)
 
+        # Send mapping result as a header (URL-safe)
+        mapping_json = json.dumps(mapping_result)
+        headers = {
+            "Content-Disposition": f"attachment; filename=formatted_{file.filename}",
+            "X-Mapping-Result": mapping_json
+        }
 
-            metadata = pd.read_csv(file.file, nrows=0)
-            
-            file.file.seek(0)
-            row_count = sum(1 for _ in file.file) - 1  # Subtract header row
-            file.file.seek(0)
-            
-            
-        else: # xlsx or xls
-
-            metadata = pd.read_excel(file.file, nrows=0)
-            
-            file.file.seek(0)
-            df_full = pd.read_excel(file.file, usecols=[0])  # Only load 1 column
-            row_count = df_full.shape[0]
-            
-            
-            
-        end_time = round(time.time() - start, 2)
-        columns = list(metadata.columns)
-        # dtypes = metadata.dtypes.apply(lambda x: str(x)).to_dict()
-
-        return JSONResponse(content={
-            "filename": file.filename,
-            "columns": columns,
-            # "dtypes": dtypes,
-            "num_rows": row_count,
-            "time_taken": str(end_time) + " seconds"
-        })
-    
-    except HTTPException:
-        raise
+        return StreamingResponse(
+            output_buffer,
+            media_type="text/csv",
+            headers=headers
+        )
 
     except Exception as e:
-        logger.error(e)
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        import traceback; traceback.print_exc();
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)}
+        )

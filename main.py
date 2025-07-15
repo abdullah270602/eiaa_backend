@@ -1,6 +1,9 @@
 import logging
 from fastapi import FastAPI
 from app.routes.upload import router as upload_router
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 

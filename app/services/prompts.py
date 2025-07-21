@@ -23,6 +23,8 @@ The output format MUST be:
 }
 """
 
+# Legacy prompt - kept for backward compatibility but will be replaced by dynamic_mapping_agent.py
+
 
 SYSTEM_PROMPT_2 ="""
 You are an intelligent data mapping assistant that helps users map columns from uploaded files to Sage 50 customer template format.

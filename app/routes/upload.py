@@ -1,20 +1,18 @@
 import json
-from fastapi import APIRouter, File, UploadFile, HTTPException
+from fastapi import APIRouter, File, UploadFile, HTTPException, Query
 from fastapi.responses import JSONResponse, StreamingResponse
-from typing import Tuple
-import os
+from typing import Optional
 import io
-import pandas as pd
 
 from app.services.file_utils import extract_preview_data
-from app.services.formatter import apply_column_mapping
-from app.services.llm_agent import call_mapping_agent
-from app.services.template_loader import get_required_columns, load_template_columns
+from app.services.processing_service import UnifiedProcessingService
 
 
 router = APIRouter(prefix="/upload", tags=["Upload"])
 
-TEMPLATE_PATH = os.getenv("TEMPLATE_PATH")
+# Initialize the unified processing service
+processing_service = UnifiedProcessingService()
+
 
 def detect_extension(filename: str) -> str:
     if filename.endswith(".csv"):
@@ -25,47 +23,112 @@ def detect_extension(filename: str) -> str:
         raise HTTPException(status_code=400, detail="Unsupported file type")
 
 
-@router.post("/", status_code=200)
-async def upload_and_format(file: UploadFile = File(...)):
+@router.post(
+    "/",
+    status_code=200,
+    summary="Upload and Process File",
+    description="""
+    Upload a CSV or Excel file and automatically detect template type (Customer, Product, or Audit Trail).
+    The Agent will map columns to the appropriate Sage 50 template format.
+    
+    Supported file types: CSV (.csv), Excel (.xlsx, .xls)
+
+    Template types:
+        - customer: Customer/Account records
+        - product: Product/Stock records
+        - audit_trail: Audit Trail Transaction records
+
+    Response: Formatted file with processing metadata in headers
+    """,
+)
+async def upload_and_format(
+    file: UploadFile = File(
+        ...,
+        description="Upload CSV or Excel file for processing",
+        media_type="multipart/form-data",
+    ),
+    force_template: Optional[str] = Query(
+        None,
+        description="Manual Selection (Optional): 'customer', 'product', or 'audit_trail'",
+        enum=["customer", "product", "audit_trail"],
+    ),
+):
+    """
+    Upload and format a file using automatic template detection or forced template type
+    """
     extension = detect_extension(file.filename)
     contents = await file.read()
     buffer = io.BytesIO(contents)
 
     try:
+        # Extract preview data and full DataFrame
         preview_data, df = extract_preview_data(buffer, extension)
-        template_columns = load_template_columns(TEMPLATE_PATH)
-        required_columns = get_required_columns()
 
-        mapping_result = call_mapping_agent(
-            template_columns, required_columns, preview_data
-        )
+        # Process using unified service
+        if force_template:
+            df_final, result_metadata = processing_service.force_template_processing(
+                df, preview_data, force_template
+            )
+        else:
+            df_final, result_metadata = processing_service.process_file(
+                df, preview_data
+            )
 
-        df_final = apply_column_mapping(
-            df, 
-            mapping_result["column_mapping"],
-            mapping_result["unmatched_columns"]
-        )
+        # Convert to same format as input
+        if extension == ".csv":
+            # Return as CSV
+            output_buffer = io.StringIO()
+            df_final.to_csv(output_buffer, index=False)
+            output_buffer.seek(0)
+            media_type = "text/csv"
+            output_stream = output_buffer
+        else:
+            # Return as Excel
+            output_buffer = io.BytesIO()
+            df_final.to_excel(output_buffer, index=False, engine="openpyxl")
+            output_buffer.seek(0)
+            media_type = (
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+            output_stream = output_buffer
 
-        output_buffer = io.StringIO()
-        df_final.to_csv(output_buffer, index=False)
-        output_buffer.seek(0)
-
-        # Send mapping result as a header (URL-safe)
-        mapping_json = json.dumps(mapping_result)
+        # Send complete metadata as header
+        metadata_json = json.dumps(result_metadata)
         headers = {
             "Content-Disposition": f"attachment; filename=formatted_{file.filename}",
-            "X-Mapping-Result": mapping_json
+            "X-Processing-Result": metadata_json,
+            "X-Template-Type": result_metadata["template_type"],
+            "X-Template-Confidence": str(
+                result_metadata["template_detection"]["confidence"]
+            ),
         }
 
-        return StreamingResponse(
-            output_buffer,
-            media_type="text/csv",
-            headers=headers
-        )
+        return StreamingResponse(output_stream, media_type=media_type, headers=headers)
 
     except Exception as e:
-        import traceback; traceback.print_exc();
+        import traceback
+
+        traceback.print_exc()
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+@router.get(
+    "/templates",
+    summary="Get Available Templates",
+    description="Get information about all available template types and their configurations"
+)
+async def get_available_templates():
+    """
+    Get information about all available templates
+    """
+    try:
+        templates_info = processing_service.get_available_templates()
         return JSONResponse(
-            status_code=500,
-            content={"error": str(e)}
+            status_code=200,
+            content={
+                "available_templates": templates_info,
+                "supported_force_template_values": list(templates_info.keys()),
+            },
         )
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})

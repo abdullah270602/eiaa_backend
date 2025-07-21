@@ -27,9 +27,9 @@ class TemplateDetectionAgent:
         Returns: (template_type, confidence_score)
         """
         # First try rule-based detection for performance
-        # rule_based_result = self._rule_based_detection(uploaded_preview)
-        # if rule_based_result[1] > 0.8:  # High confidence threshold
-        #     return rule_based_result
+        rule_based_result = self._rule_based_detection(uploaded_preview)
+        if rule_based_result[1] > 0.8:  # High confidence threshold
+            return rule_based_result
         
         # Fall back to LLM-based detection for ambiguous cases
         return self._llm_based_detection(uploaded_preview)

@@ -19,7 +19,8 @@ TEMPLATE_KEYWORDS = {
     "customer": ["customer", "account"],
     "product": ["product", "stock", "item"],
     "audit_trail": ["audit", "trail", "transaction"],
-    "supplier": ["supplier", "vendor", "purchase"]
+    "supplier": ["supplier", "vendor", "purchase"],
+    "nominal_record": ["nominal", "budget", "refn"]
 }
 
 # Test Modes

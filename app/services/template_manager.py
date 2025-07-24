@@ -10,6 +10,7 @@ class TemplateType(Enum):
     PRODUCT = "product"
     AUDIT_TRAIL = "audit_trail"
     SUPPLIER = "supplier"
+    NOMINAL_RECORD = "nominal_record"
 
 @dataclass
 class TemplateConfig:
@@ -87,10 +88,24 @@ class TemplateManager:
             description="Supplier/Vendor records for Sage 50"
         )
         
+        # Nominal Record template configuration
+        nominal_config = TemplateConfig(
+            name="Nominal Record Template",
+            template_type=TemplateType.NOMINAL_RECORD,
+            file_path=os.path.join(self.templates_dir, "Nominal_Record_Template.csv"),
+            required_columns=["Refn*"],
+            key_indicators=[
+                "refn", "name", "budget", "month", "yearly budget", "prior year",
+                "nominal", "account", "budget allocation", "financial", "ledger"
+            ],
+            description="Nominal Account records for Sage 50"
+        )
+        
         self.templates[TemplateType.CUSTOMER] = customer_config
         self.templates[TemplateType.PRODUCT] = product_config
         self.templates[TemplateType.AUDIT_TRAIL] = audit_trail_config
         self.templates[TemplateType.SUPPLIER] = supplier_config
+        self.templates[TemplateType.NOMINAL_RECORD] = nominal_config
     
     def get_template_config(self, template_type: TemplateType) -> TemplateConfig:
         """Get configuration for a specific template type"""

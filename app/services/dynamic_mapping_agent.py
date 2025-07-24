@@ -331,6 +331,80 @@ class DynamicMappingAgent:
             - "BIC" → "Bank BIC Swift"
             """
         
+        elif template_type == TemplateType.NOMINAL_RECORD:
+            specific_examples = """
+            
+            ## Nominal Record Template Mapping Examples:
+            
+            ### Account Identification
+            - "Account Code" → "Refn*"
+            - "Code" → "Refn*"
+            - "Reference" → "Refn*"
+            - "Account Reference" → "Refn*"
+            - "Nominal Code" → "Refn*"
+            - "GL Code" → "Refn*"
+            - "Account Name" → "Name"
+            - "Description" → "Name"
+            - "Account Description" → "Name"
+            - "Title" → "Name"
+
+            ### Budget Fields
+            - "Annual Budget" → "Yearly Budget"
+            - "Total Budget" → "Yearly Budget"
+            - "Year Budget" → "Yearly Budget"
+            - "Budget Amount" → "Yearly Budget"
+            - "Jan Budget" → "Month 1 Budget"
+            - "January" → "Month 1 Budget"
+            - "Feb Budget" → "Month 2 Budget"
+            - "February" → "Month 2 Budget"
+            - "Mar Budget" → "Month 3 Budget"
+            - "March" → "Month 3 Budget"
+            - "Apr Budget" → "Month 4 Budget"
+            - "April" → "Month 4 Budget"
+            - "May Budget" → "Month 5 Budget"
+            - "Jun Budget" → "Month 6 Budget"
+            - "June" → "Month 6 Budget"
+            - "Jul Budget" → "Month 7 Budget"
+            - "July" → "Month 7 Budget"
+            - "Aug Budget" → "Month 8 Budget"
+            - "August" → "Month 8 Budget"
+            - "Sep Budget" → "Month 9 Budget"
+            - "September" → "Month 9 Budget"
+            - "Oct Budget" → "Month 10 Budget"
+            - "October" → "Month 10 Budget"
+            - "Nov Budget" → "Month 11 Budget"
+            - "November" → "Month 11 Budget"
+            - "Dec Budget" → "Month 12 Budget"
+            - "December" → "Month 12 Budget"
+
+            ### Prior Year Fields
+            - "Last Year Jan" → "Prior Year Month 1"
+            - "Previous Year January" → "Prior Year Month 1"
+            - "PY Jan" → "Prior Year Month 1"
+            - "Last Year Feb" → "Prior Year Month 2"
+            - "PY Feb" → "Prior Year Month 2"
+            - "Last Year Dec" → "Prior Year Month 12"
+            - "PY Dec" → "Prior Year Month 12"
+            - "2 Years Ago Jan" → "Prior Yr2 Month 1"
+            - "Yr-2 Jan" → "Prior Yr2 Month 1"
+            - "3 Years Ago Jan" → "Prior Yr3 Month 1"
+            - "Yr-3 Jan" → "Prior Yr3 Month 1"
+            - "4 Years Ago Jan" → "Prior Yr4 Month 1"
+            - "Yr-4 Jan" → "Prior Yr4 Month 1"
+            - "5 Years Ago Jan" → "Prior Yr5 Month 1"
+            - "Yr-5 Jan" → "Prior Yr5 Month 1"
+
+            ### Quarterly Budget Fields
+            - "Q1 Budget" → "Month 1 Budget" (use first month of quarter)
+            - "Q2 Budget" → "Month 4 Budget"
+            - "Q3 Budget" → "Month 7 Budget"
+            - "Q4 Budget" → "Month 10 Budget"
+            - "Quarter 1" → "Month 1 Budget"
+            - "Quarter 2" → "Month 4 Budget"
+            - "Quarter 3" → "Month 7 Budget"
+            - "Quarter 4" → "Month 10 Budget"
+            """
+        
         else:
             specific_examples = ""
         

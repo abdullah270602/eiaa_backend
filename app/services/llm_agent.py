@@ -48,7 +48,6 @@ def call_mapping_agent(
         )
 
         content = response.choices[0].message.content
-        print("🧪 Raw LLM Response:", json.dumps(content, indent=2))
 
         cleaned = clean_json_response(content)
         return json.loads(cleaned)

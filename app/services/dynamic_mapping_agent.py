@@ -62,7 +62,6 @@ class DynamicMappingAgent:
             )
 
             content = response.choices[0].message.content
-            print(f"🧪 Raw LLM Response for {template_type.value}:", json.dumps(content, indent=2))
 
             cleaned = clean_json_response(content)
             result = json.loads(cleaned)

@@ -85,7 +85,7 @@ class TemplateDetectionAgent:
             
             Respond with JSON in this format:
             {{
-                "template_type": "customer|product",
+                "template_type": "customer|product|audit_trail|supplier|nominal_record",
                 "confidence": 0.95,
                 "reasoning": "Brief explanation of why this template was chosen"
             }}
@@ -113,7 +113,8 @@ class TemplateDetectionAgent:
                 "customer": TemplateType.CUSTOMER,
                 "product": TemplateType.PRODUCT,
                 "audit_trail": TemplateType.AUDIT_TRAIL,
-                "supplier": TemplateType.SUPPLIER
+                "supplier": TemplateType.SUPPLIER,
+                "nominal_record": TemplateType.NOMINAL_RECORD
             }
             
             if template_type_str not in template_type_map:
@@ -145,6 +146,7 @@ class TemplateDetectionAgent:
         - Product templates typically contain: stock codes, descriptions, prices, categories, suppliers, inventory info
         - Audit Trail templates typically contain: transaction types, amounts, dates, references, tax codes, nominal accounts
         - Supplier templates typically contain: supplier codes, vendor names, contact info, payment terms, purchase-related fields
+        - Nominal Record templates typically contain: account references (Refn), account names, budget allocations, monthly budgets, prior year data
         - Look for semantic patterns, not just literal matches
         - Consider the overall context and data structure
         

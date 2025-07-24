@@ -93,10 +93,11 @@ class TemplateManager:
             name="Nominal Record Template",
             template_type=TemplateType.NOMINAL_RECORD,
             file_path=os.path.join(self.templates_dir, "Nominal_Record_Template.csv"),
-            required_columns=["Refn*"],
+            required_columns=["Refn*", "Name"],
             key_indicators=[
-                "refn", "name", "budget", "month", "yearly budget", "prior year",
-                "nominal", "account", "budget allocation", "financial", "ledger"
+                "refn*", "refn", "yearly budget", "month 1 budget", "month 2 budget", "month 3 budget",
+                "budget", "month", "prior year", "prior yr", "nominal", "account code",
+                "budget allocation", "financial", "ledger", "monthly budget", "annual budget"
             ],
             description="Nominal Account records for Sage 50"
         )

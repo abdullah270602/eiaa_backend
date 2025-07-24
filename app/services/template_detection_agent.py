@@ -112,7 +112,8 @@ class TemplateDetectionAgent:
             template_type_map = {
                 "customer": TemplateType.CUSTOMER,
                 "product": TemplateType.PRODUCT,
-                "audit_trail": TemplateType.AUDIT_TRAIL
+                "audit_trail": TemplateType.AUDIT_TRAIL,
+                "supplier": TemplateType.SUPPLIER
             }
             
             if template_type_str not in template_type_map:
@@ -143,6 +144,7 @@ class TemplateDetectionAgent:
         - Customer templates typically contain: names, addresses, contact info, financial terms, account references
         - Product templates typically contain: stock codes, descriptions, prices, categories, suppliers, inventory info
         - Audit Trail templates typically contain: transaction types, amounts, dates, references, tax codes, nominal accounts
+        - Supplier templates typically contain: supplier codes, vendor names, contact info, payment terms, purchase-related fields
         - Look for semantic patterns, not just literal matches
         - Consider the overall context and data structure
         

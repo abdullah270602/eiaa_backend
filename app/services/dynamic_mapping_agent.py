@@ -273,6 +273,65 @@ class DynamicMappingAgent:
             - "Cost Centre" → "Cost Code Refn"
             """
         
+        elif template_type == TemplateType.SUPPLIER:
+            specific_examples = """
+            
+            ## Supplier Template Mapping Examples:
+            
+            ### Supplier Identification
+            - "Supplier Code" → "Account Reference"
+            - "Vendor Code" → "Account Reference"
+            - "Supplier ID" → "Account Reference"
+            - "Vendor ID" → "Account Reference"
+            - "Supplier Name" → "Account Name"
+            - "Vendor Name" → "Account Name"
+            - "Company Name" → "Account Name"
+            - "Business Name" → "Account Name"
+
+            ### Contact Information
+            - "Contact Person" → "Contact Name"
+            - "Primary Contact" → "Contact Name"
+            - "Main Contact" → "Contact Name"
+            - "Phone" → "Telephone Number"
+            - "Phone No" → "Telephone Number"
+            - "Mobile" → "Telephone Number"
+            - "Email" → "EMail"
+            - "Email Address" → "EMail"
+            - "Website" → "WWW"
+            - "Web" → "WWW"
+
+            ### Address Fields
+            - "Address" → "Street 1"
+            - "Address 1" → "Street 1"
+            - "Address 2" → "Street 2"
+            - "City" → "Town"
+            - "State" → "County"
+            - "Zip" → "Postcode"
+            - "Zip Code" → "Postcode"
+            - "Postal Code" → "Postcode"
+
+            ### Financial Fields
+            - "Max Credit" → "Credit Limit"
+            - "Credit Line" → "Credit Limit"
+            - "Payment Terms" → "Terms Text"
+            - "Net Days" → "Due Days"
+            - "Payment Days" → "Due Days"
+            - "Discount %" → "Discount Rate"
+            - "Discount Percent" → "Discount Rate"
+
+            ### Business Details
+            - "VAT Number" → "VAT Reg No"
+            - "Tax ID" → "VAT Reg No"
+            - "Reference" → "Account Reference"
+            - "Code" → "Account Reference"
+            - "Bank" → "Bank Name"
+            - "Sort Code" → "Bank Sort Code"
+            - "Account Number" → "Bank Account No"
+            - "IBAN" → "Bank IBAN"
+            - "Swift" → "Bank BIC Swift"
+            - "BIC" → "Bank BIC Swift"
+            """
+        
         else:
             specific_examples = ""
         

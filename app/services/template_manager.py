@@ -9,6 +9,7 @@ class TemplateType(Enum):
     CUSTOMER = "customer"
     PRODUCT = "product"
     AUDIT_TRAIL = "audit_trail"
+    SUPPLIER = "supplier"
 
 @dataclass
 class TemplateConfig:
@@ -72,9 +73,24 @@ class TemplateManager:
             description="Audit Trail Transaction records for Sage 50"
         )
         
+        # Supplier template configuration
+        supplier_config = TemplateConfig(
+            name="Supplier Template",
+            template_type=TemplateType.SUPPLIER,
+            file_path=os.path.join(self.templates_dir, "Supplier_Record_Template.csv"),
+            required_columns=["Account Reference"],
+            key_indicators=[
+                "account reference", "supplier", "vendor", "account name", 
+                "company", "contact name", "telephone", "email", "address",
+                "credit limit", "payment terms", "vat", "postcode", "purchase"
+            ],
+            description="Supplier/Vendor records for Sage 50"
+        )
+        
         self.templates[TemplateType.CUSTOMER] = customer_config
         self.templates[TemplateType.PRODUCT] = product_config
         self.templates[TemplateType.AUDIT_TRAIL] = audit_trail_config
+        self.templates[TemplateType.SUPPLIER] = supplier_config
     
     def get_template_config(self, template_type: TemplateType) -> TemplateConfig:
         """Get configuration for a specific template type"""

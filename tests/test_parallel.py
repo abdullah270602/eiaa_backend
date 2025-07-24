@@ -34,8 +34,8 @@ class PathResolver:
         return None
     
     @staticmethod
-    def discover_test_files(directory: str) -> List[str]:
-        """Discover all test files in the given directory"""
+    def discover_test_files(directory: str, template_filter: str = None) -> List[str]:
+        """Discover all test files in the given directory, optionally filtered by template type"""
         test_files = []
         resolved_dir = PathResolver.find_test_directory(directory)
         
@@ -44,6 +44,12 @@ class PathResolver:
         
         for file_name in sorted(os.listdir(resolved_dir)):
             if file_name.endswith(SUPPORTED_EXTENSIONS):
+                # Apply template filter if specified
+                if template_filter:
+                    template_keywords = TEMPLATE_KEYWORDS.get(template_filter, [])
+                    if not any(keyword in file_name.lower() for keyword in template_keywords):
+                        continue
+                
                 file_path = os.path.join(resolved_dir, file_name)
                 test_files.append(file_path)
         
@@ -286,7 +292,7 @@ class TemplateSystemTester:
         
         return tasks
     
-    async def run_comprehensive_test(self, test_directory: str) -> None:
+    async def run_comprehensive_test(self, test_directory: str, template_filter: str = None) -> None:
         """Run comprehensive test suite"""
         # Check server connectivity first
         print(f"🔌 Checking server connectivity at {self.base_url}...")
@@ -302,14 +308,16 @@ class TemplateSystemTester:
             print(f"💡 Make sure the server is running at {self.base_url}")
             return
         
-        # Discover test files
-        test_files = PathResolver.discover_test_files(test_directory)
+        # Discover test files with optional template filtering
+        test_files = PathResolver.discover_test_files(test_directory, template_filter)
         
         if not test_files:
-            print(f"❌ No test files found in directory: {test_directory}")
+            filter_msg = f" for template '{template_filter}'" if template_filter else ""
+            print(f"❌ No test files found{filter_msg} in directory: {test_directory}")
             return
         
-        print(f"📋 Discovered {len(test_files)} test files:")
+        filter_msg = f" (filtered for '{template_filter}')" if template_filter else ""
+        print(f"📋 Discovered {len(test_files)} test files{filter_msg}:")
         for file_path in test_files:
             print(f"  • {os.path.basename(file_path)}")
         
@@ -409,21 +417,43 @@ async def main():
     
     # Get max concurrent requests from command line (optional)
     max_concurrent = MAX_CONCURRENT_REQUESTS
+    template_filter = None
+    
+    # Parse additional arguments
     if len(sys.argv) > 2:
         try:
-            max_concurrent = int(sys.argv[2])
-            max_concurrent = max(1, min(max_concurrent, 20))  # Limit between 1-20
+            # Check if second argument is a number (concurrency) or template filter
+            if sys.argv[2].isdigit():
+                max_concurrent = int(sys.argv[2])
+                max_concurrent = max(1, min(max_concurrent, 20))  # Limit between 1-20
+                # Third argument could be template filter
+                if len(sys.argv) > 3:
+                    template_filter = sys.argv[3]
+            else:
+                # Second argument is template filter
+                template_filter = sys.argv[2]
+                # Third argument could be concurrency
+                if len(sys.argv) > 3 and sys.argv[3].isdigit():
+                    max_concurrent = int(sys.argv[3])
+                    max_concurrent = max(1, min(max_concurrent, 20))
         except ValueError:
-            print(f"⚠️ Invalid concurrency value, using default: {MAX_CONCURRENT_REQUESTS}")
+            print(f"⚠️ Invalid arguments, using defaults")
     
     print(f"📁 Test directory: {test_directory}")
     print(f"🔄 Max concurrent requests: {max_concurrent}")
     print(f"🌐 Server URL: {BASE_URL}")
+    if template_filter:
+        available_templates = list(TEMPLATE_KEYWORDS.keys())
+        if template_filter in available_templates:
+            print(f"🎯 Template filter: {template_filter}")
+        else:
+            print(f"❌ Invalid template filter '{template_filter}'. Available: {', '.join(available_templates)}")
+            return
     print()
     
     # Initialize and run tester
     tester = TemplateSystemTester(BASE_URL, max_concurrent)
-    await tester.run_comprehensive_test(test_directory)
+    await tester.run_comprehensive_test(test_directory, template_filter)
     tester.generate_report()
 
 if __name__ == "__main__":
@@ -431,8 +461,14 @@ if __name__ == "__main__":
     
     print("🚀 Template System Parallel Testing Tool")
     print("=" * 50)
-    print("💡 Usage: python test_parallel.py [test_directory] [max_concurrent_requests]")
-    print("💡 Example: python test_parallel.py test_files 8")
+    print("💡 Usage: python test_parallel.py [test_directory] [concurrency|template] [template|concurrency]")
+    print("💡 Examples:")
+    print("   python test_parallel.py test_files                    # All templates")
+    print("   python test_parallel.py test_files customer           # Only customer templates")
+    print("   python test_parallel.py test_files 2                  # All templates, 2 concurrent")
+    print("   python test_parallel.py test_files customer 2         # Customer templates, 2 concurrent")
+    print("   python test_parallel.py test_files 2 customer         # Customer templates, 2 concurrent")
+    print(f"💡 Available templates: {', '.join(TEMPLATE_KEYWORDS.keys())}")
     print()
     
     asyncio.run(main())

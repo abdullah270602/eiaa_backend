@@ -121,7 +121,8 @@ class UnifiedProcessingService:
         template_type_map = {
             "customer": TemplateType.CUSTOMER,
             "product": TemplateType.PRODUCT,
-            "audit_trail": TemplateType.AUDIT_TRAIL
+            "audit_trail": TemplateType.AUDIT_TRAIL,
+            "supplier": TemplateType.SUPPLIER
         }
         
         if template_type_str.lower() not in template_type_map:

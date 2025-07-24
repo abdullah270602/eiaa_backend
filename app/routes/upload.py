@@ -50,8 +50,8 @@ async def upload_and_format(
     ),
     force_template: Optional[str] = Query(
         None,
-        description="Manual Selection (Optional): 'customer', 'product', 'audit_trail', or 'supplier'",
-        enum=["customer", "product", "audit_trail", "supplier"],
+        description="Manual Selection (Optional): 'customer', 'product', 'audit_trail', 'supplier', or 'nominal_record'",
+        enum=["customer", "product", "audit_trail", "supplier", "nominal_record"],
     ),
 ):
     """

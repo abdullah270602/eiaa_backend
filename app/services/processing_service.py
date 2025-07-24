@@ -122,7 +122,8 @@ class UnifiedProcessingService:
             "customer": TemplateType.CUSTOMER,
             "product": TemplateType.PRODUCT,
             "audit_trail": TemplateType.AUDIT_TRAIL,
-            "supplier": TemplateType.SUPPLIER
+            "supplier": TemplateType.SUPPLIER,
+            "nominal_record": TemplateType.NOMINAL_RECORD,
         }
         
         if template_type_str.lower() not in template_type_map:

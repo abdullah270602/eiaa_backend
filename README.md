@@ -1,6 +1,6 @@
 # 🧠 EIAA — Excel Import Autonomous Agent
 
-**EIAA** is an AI-powered backend service that intelligently maps and transforms Excel/CSV files to multiple [Sage 50](https://www.sage.com/en-gb/products/sage-50cloud/) template formats using advanced Large Language Model (LLM) technology and intelligent template detection.
+**EIAA** is an AI-powered backend service that intelligently maps and transforms Excel/CSV files to multiple [Sage 50](https://www.sage.com/en-gb/products/sage-50cloud/) template formats using advanced AI Agent technology and intelligent template detection.
 
 > 💡 **Perfect for** accounting teams, data entry workflows, ERP migrations, and automated data transformation pipelines.
 

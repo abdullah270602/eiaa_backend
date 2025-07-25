@@ -116,7 +116,7 @@ class UnifiedProcessingService:
         Args:
             df: The full DataFrame
             preview_data: Sample data
-            template_type_str: Template type as string ("customer" or "product")
+            template_type_str: Template type as string ("customer", "product", "audit_trail", "supplier", "nominal_record", "stock_transactions")
         """
         template_type_map = {
             "customer": TemplateType.CUSTOMER,
@@ -124,6 +124,7 @@ class UnifiedProcessingService:
             "audit_trail": TemplateType.AUDIT_TRAIL,
             "supplier": TemplateType.SUPPLIER,
             "nominal_record": TemplateType.NOMINAL_RECORD,
+            "stock_transactions": TemplateType.STOCK_TRANSACTIONS,
         }
         
         if template_type_str.lower() not in template_type_map:

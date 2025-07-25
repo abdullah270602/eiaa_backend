@@ -17,7 +17,7 @@ SUPPORTED_EXTENSIONS = ('.csv', '.xlsx', '.xls')
 # Template Configuration
 TEMPLATE_KEYWORDS = {
     "customer": ["customer", "account"],
-    "product": ["product", "stock", "item"],
+    "product": ["product", "item"],
     "audit_trail": ["audit", "trail", "transaction"],
     "supplier": ["supplier", "vendor", "purchase"],
     "nominal_record": ["nominal", "budget", "refn"],

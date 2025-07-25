@@ -63,7 +63,14 @@ class TemplateDetector:
         """Detect template type from filename using keyword matching"""
         file_name_lower = file_name.lower()
         
+        # Check for exact matches first (more specific)
+        if "stock_transactions" in file_name_lower or "stock_transaction" in file_name_lower:
+            return "stock_transactions"
+        
+        # Then check other templates
         for template_type, keywords in TEMPLATE_KEYWORDS.items():
+            if template_type == "stock_transactions":  # Already checked above
+                continue
             if any(keyword in file_name_lower for keyword in keywords):
                 return template_type
         

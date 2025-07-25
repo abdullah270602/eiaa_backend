@@ -26,7 +26,7 @@ uv run python tests/test_parallel.py test_files nominal_record
 # Combine template filter with concurrency
 uv run python tests/test_parallel.py test_files customer 2
 
-# Use concurrency=1 for reliable results
+# Use concurrency=1 or 2 for most reliable results
 ```
 
 **Template-Specific Testing**
@@ -107,9 +107,9 @@ uv run python tests/test_parallel.py test_files nominal_record
 **Performance Testing**
 ```bash
 # Test with higher concurrency
-uv run python tests/test_parallel.py test_files 5
+uv run python tests/test_parallel.py test_files 3
 
-# Note: Use concurrency=1 for most reliable results
+# Note: Use concurrency=1 or 2 for most reliable results
 ```
 
 ## Troubleshooting

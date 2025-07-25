@@ -49,9 +49,9 @@ uv run python tests/test_parallel.py test_files nominal_record
 
 ## Test Coverage
 
-- **18 test files** across 4 template types
-- **23 total test cases** (standard + forced detection)
-- **Template types**: Customer, Product, Audit Trail, Supplier
+- **21 test files** across 6 template types
+- **26+ total test cases** (standard + forced detection)
+- **Template types**: Customer, Product, Audit Trail, Supplier, Nominal Record, Stock Transactions
 - **File formats**: CSV and Excel (.xlsx)
 
 ## Configuration

@@ -1,6 +1,6 @@
 # 🧠 EIAA — Excel Import Autonomous Agent
 
-**EIAA** is an AI-powered backend service that intelligently maps and transforms Excel/CSV files to multiple [Sage 50](https://www.sage.com/en-gb/products/sage-50cloud/) template formats using advanced AI Agent technology and intelligent template detection.
+**EIAA** is an AI-powered backend service that intelligently maps and transforms Excel/CSV files to multiple [Sage 50](https://www.sage.com/en-gb/products/sage-50cloud/) template formats using advanced Large Language Model (LLM) technology and intelligent template detection.
 
 > 💡 **Perfect for** accounting teams, data entry workflows, ERP migrations, and automated data transformation pipelines.
 
@@ -9,7 +9,7 @@
 ## 🚀 Key Features
 
 ### 🎯 **Intelligent Template Detection**
-- **Auto-detection**  5 Sage 50 template types: Customer, Product, Audit Trail, Supplier, and Nominal Record
+- **Auto-detection** of 6 Sage 50 template types: Customer, Product, Audit Trail, Supplier, Nominal Record, and Stock Transactions
 - **Rule-based** + **LLM-powered** detection for maximum accuracy
 - **Confidence scoring** to ensure reliable template identification
 - **Manual override** option for forcing specific template types
@@ -50,6 +50,7 @@
 | **Audit Trail** | Transaction records | Transaction Type, Amounts, Dates, References | Financial auditing, transaction imports |
 | **Supplier** | Supplier/Vendor records | Supplier Code, Contact Info, Payment Terms | Vendor management, procurement |
 | **Nominal Record** | Chart of accounts | Account Reference, Budget Data, Historical Data | Financial planning, budget imports |
+| **Stock Transactions** | Stock movements/transactions | Type, Stock Code, Date, Quantity, Prices | Inventory tracking, stock movements |
 
 ---
 

@@ -11,6 +11,7 @@ class TemplateType(Enum):
     AUDIT_TRAIL = "audit_trail"
     SUPPLIER = "supplier"
     NOMINAL_RECORD = "nominal_record"
+    STOCK_TRANSACTIONS = "stock_transactions"
 
 @dataclass
 class TemplateConfig:
@@ -102,11 +103,28 @@ class TemplateManager:
             description="Nominal Account records for Sage 50"
         )
         
+        # Stock Transactions template configuration
+        stock_transactions_config = TemplateConfig(
+            name="Stock Transactions Template",
+            template_type=TemplateType.STOCK_TRANSACTIONS,
+            file_path=os.path.join(self.templates_dir, "Stock_Transactions_Template.csv"),
+            required_columns=["Type*", "Stock Code*", "Date*", "Quantity*", "Cost Price*", "Sales Price*"],
+            key_indicators=[
+                "type*", "type", "stock code*", "stock code", "transaction", "stock transaction",
+                "date*", "date", "quantity*", "quantity", "cost price*", "cost price", 
+                "sales price*", "sales price", "reference", "details", "project refn", 
+                "cost code refn", "inventory transaction", "stock movement", "in", "out",
+                "adjustment", "transfer", "receipt", "issue"
+            ],
+            description="Stock Transaction records for Sage 50"
+        )
+        
         self.templates[TemplateType.CUSTOMER] = customer_config
         self.templates[TemplateType.PRODUCT] = product_config
         self.templates[TemplateType.AUDIT_TRAIL] = audit_trail_config
         self.templates[TemplateType.SUPPLIER] = supplier_config
         self.templates[TemplateType.NOMINAL_RECORD] = nominal_config
+        self.templates[TemplateType.STOCK_TRANSACTIONS] = stock_transactions_config
     
     def get_template_config(self, template_type: TemplateType) -> TemplateConfig:
         """Get configuration for a specific template type"""

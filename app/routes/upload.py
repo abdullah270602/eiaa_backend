@@ -28,7 +28,7 @@ def detect_extension(filename: str) -> str:
     status_code=200,
     summary="Upload and Process File",
     description="""
-    Upload a CSV or Excel file and automatically detect template type (Customer, Product, Audit Trail, Supplier, or Nominal Record).
+    Upload a CSV or Excel file and automatically detect template type (Customer, Product, Audit Trail, Supplier, Nominal Record, or Stock Transactions).
     The Agent will map columns to the appropriate Sage 50 template format.
     
     Supported file types: CSV (.csv), Excel (.xlsx, .xls)
@@ -39,6 +39,7 @@ def detect_extension(filename: str) -> str:
         - audit_trail: Audit Trail Transaction records
         - supplier: Supplier/Vendor records
         - nominal_record: Nominal Account records
+        - stock_transactions: Stock Transaction/Movement records
 
     Response: Formatted file with processing metadata in headers
     """,
@@ -51,8 +52,8 @@ async def upload_and_format(
     ),
     force_template: Optional[str] = Query(
         None,
-        description="Manual Selection (Optional): 'customer', 'product', 'audit_trail', 'supplier', or 'nominal_record'",
-        enum=["customer", "product", "audit_trail", "supplier", "nominal_record"],
+        description="Manual Selection (Optional): 'customer', 'product', 'audit_trail', 'supplier', 'nominal_record', or 'stock_transactions'",
+        enum=["customer", "product", "audit_trail", "supplier", "nominal_record", "stock_transactions"],
     ),
 ):
     """

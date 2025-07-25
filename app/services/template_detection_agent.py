@@ -114,7 +114,8 @@ class TemplateDetectionAgent:
                 "product": TemplateType.PRODUCT,
                 "audit_trail": TemplateType.AUDIT_TRAIL,
                 "supplier": TemplateType.SUPPLIER,
-                "nominal_record": TemplateType.NOMINAL_RECORD
+                "nominal_record": TemplateType.NOMINAL_RECORD,
+                "stock_transactions": TemplateType.STOCK_TRANSACTIONS
             }
             
             if template_type_str not in template_type_map:
@@ -147,6 +148,7 @@ class TemplateDetectionAgent:
         - Audit Trail templates typically contain: transaction types, amounts, dates, references, tax codes, nominal accounts
         - Supplier templates typically contain: supplier codes, vendor names, contact info, payment terms, purchase-related fields
         - Nominal Record templates typically contain: account references (Refn), account names, budget allocations, monthly budgets, prior year data
+        - Stock Transactions templates typically contain: transaction types, stock codes, dates, quantities, prices, stock movements, inventory adjustments
         - Look for semantic patterns, not just literal matches
         - Consider the overall context and data structure
         

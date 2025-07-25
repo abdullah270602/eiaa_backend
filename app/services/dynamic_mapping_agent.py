@@ -405,6 +405,106 @@ class DynamicMappingAgent:
             - "Quarter 4" → "Month 10 Budget"
             """
         
+        elif template_type == TemplateType.STOCK_TRANSACTIONS:
+            specific_examples = """
+            
+            ## Stock Transactions Template Mapping Examples:
+            
+            ### Transaction Type (Required)
+            - "Transaction Type" → "Type*"
+            - "Type" → "Type*"
+            - "Movement Type" → "Type*"
+            - "Stock Movement" → "Type*"
+            - "Operation" → "Type*"
+            - "Action" → "Type*"
+            - "Movement" → "Type*"
+            - "Stock Action" → "Type*"
+            
+            ### Stock Code (Required)
+            - "Stock Code" → "Stock Code*"
+            - "Product Code" → "Stock Code*"
+            - "Item Code" → "Stock Code*"
+            - "SKU" → "Stock Code*"
+            - "Part Number" → "Stock Code*"
+            - "Product ID" → "Stock Code*"
+            - "Item ID" → "Stock Code*"
+            - "Code" → "Stock Code*"
+            
+            ### Date (Required)
+            - "Date" → "Date*"
+            - "Transaction Date" → "Date*"
+            - "Movement Date" → "Date*"
+            - "Entry Date" → "Date*"
+            - "Posted Date" → "Date*"
+            - "Process Date" → "Date*"
+            
+            ### Quantity (Required)
+            - "Quantity" → "Quantity*"
+            - "Qty" → "Quantity*"
+            - "Amount" → "Quantity*"
+            - "Stock Quantity" → "Quantity*"
+            - "Movement Qty" → "Quantity*"
+            - "Units" → "Quantity*"
+            - "Count" → "Quantity*"
+            
+            ### Cost Price (Required)
+            - "Cost Price" → "Cost Price*"
+            - "Unit Cost" → "Cost Price*"
+            - "Cost" → "Cost Price*"
+            - "Purchase Price" → "Cost Price*"
+            - "Buy Price" → "Cost Price*"
+            - "Wholesale Price" → "Cost Price*"
+            - "Cost Per Unit" → "Cost Price*"
+            - "Average Cost" → "Cost Price*"
+            
+            ### Sales Price (Required)
+            - "Sales Price" → "Sales Price*"
+            - "Selling Price" → "Sales Price*"
+            - "Sell Price" → "Sales Price*"
+            - "Retail Price" → "Sales Price*"
+            - "List Price" → "Sales Price*"
+            - "Unit Price" → "Sales Price*"
+            - "Price" → "Sales Price*"
+            
+            ### Reference (Optional)
+            - "Reference" → "Reference"
+            - "Ref" → "Reference"
+            - "Reference Number" → "Reference"
+            - "Transaction Ref" → "Reference"
+            - "Document Ref" → "Reference"
+            - "Batch Number" → "Reference"
+            - "Order Number" → "Reference"
+            - "Invoice Number" → "Reference"
+            
+            ### Details (Optional)
+            - "Details" → "Details"
+            - "Description" → "Details"
+            - "Notes" → "Details"
+            - "Comments" → "Details"
+            - "Remarks" → "Details"
+            - "Reason" → "Details"
+            - "Transaction Details" → "Details"
+            - "Movement Reason" → "Details"
+            
+            ### Project Reference (Optional)
+            - "Project Refn" → "Project Refn"
+            - "Project Reference" → "Project Refn"
+            - "Project Code" → "Project Refn"
+            - "Project ID" → "Project Refn"
+            - "Job Number" → "Project Refn"
+            - "Job Code" → "Project Refn"
+            - "Contract Number" → "Project Refn"
+            
+            ### Cost Code Reference (Optional)
+            - "Cost Code Refn" → "Cost Code Refn"
+            - "Cost Code Reference" → "Cost Code Refn"
+            - "Cost Code" → "Cost Code Refn"
+            - "Cost Center" → "Cost Code Refn"
+            - "Department Code" → "Cost Code Refn"
+            - "Cost Centre" → "Cost Code Refn"
+            - "Activity Code" → "Cost Code Refn"
+            """
+        
         else:
             specific_examples = ""
         

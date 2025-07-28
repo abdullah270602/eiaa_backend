@@ -94,9 +94,9 @@ class TemplateManager:
             name="Nominal Record Template",
             template_type=TemplateType.NOMINAL_RECORD,
             file_path=os.path.join(self.templates_dir, "Nominal_Record_Template.csv"),
-            required_columns=["Refn*", "Name"],
+            required_columns=["Refn", "Name"],
             key_indicators=[
-                "refn*", "refn", "yearly budget", "month 1 budget", "month 2 budget", "month 3 budget",
+                "refn", "refn", "yearly budget", "month 1 budget", "month 2 budget", "month 3 budget",
                 "budget", "month", "prior year", "prior yr", "nominal", "account code",
                 "budget allocation", "financial", "ledger", "monthly budget", "annual budget"
             ],
@@ -108,11 +108,11 @@ class TemplateManager:
             name="Stock Transactions Template",
             template_type=TemplateType.STOCK_TRANSACTIONS,
             file_path=os.path.join(self.templates_dir, "Stock_Transactions_Template.csv"),
-            required_columns=["Type*", "Stock Code*", "Date*", "Quantity*", "Cost Price*", "Sales Price*"],
+            required_columns=["Type", "Stock Code", "Date", "Quantity", "Cost Price", "Sales Price"],
             key_indicators=[
-                "type*", "type", "stock code*", "stock code", "transaction", "stock transaction",
-                "date*", "date", "quantity*", "quantity", "cost price*", "cost price", 
-                "sales price*", "sales price", "reference", "details", "project refn", 
+                "type", "type", "stock code", "stock code", "transaction", "stock transaction",
+                "date", "date", "quantity", "quantity", "cost price", "cost price", 
+                "sales price", "sales price", "reference", "details", "project refn", 
                 "cost code refn", "inventory transaction", "stock movement", "in", "out",
                 "adjustment", "transfer", "receipt", "issue"
             ],
